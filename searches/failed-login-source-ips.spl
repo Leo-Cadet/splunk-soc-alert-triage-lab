@@ -1,0 +1,4 @@
+index=* "Failed password"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count as failed_attempts by src_ip
+| sort - failed_attempts
