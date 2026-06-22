@@ -1,76 +1,139 @@
 # Splunk SOC Alert Triage Lab
 
-This repository documents a beginner SOC alert triage workflow using Splunk.
+## Project Summary
+
+This project documents a Splunk-based SOC investigation workflow for suspicious Linux SSH authentication activity. The lab uses simulated Linux authentication logs to detect failed SSH logins, targeted usernames, successful logins after failed attempts, and sudo activity after authentication.
+
+The final deliverable is a Splunk dashboard, a scheduled alert, SPL detection searches, and an incident report for a suspicious SSH authentication sequence.
 
 ## Objective
 
-Practice how a SOC analyst reviews an alert, validates the evidence, searches related events, and writes clear investigation notes.
+Build a practical SOC analyst workflow that answers four investigation questions:
 
-## Scenario
+1. Which source IPs generated the most failed SSH login attempts?
+2. Which usernames were targeted the most?
+3. Did any source IP have failed logins followed by a successful login?
+4. Did any risky user run sudo commands after login?
 
-A security alert is generated from suspicious or repeated activity. The analyst must decide whether the alert is likely benign, suspicious, or needs escalation.
+## Lab Scenario
+
+A Linux host generated SSH authentication events. Several source IPs attempted failed logins. One suspicious sequence involved source IP `192.168.1.90`, failed username attempts against `john` and `johnny`, a successful login as `john`, and a sudo command execution of `/usr/bin/whoami`.
+
+This pattern may indicate username guessing followed by successful credential-based access and privilege validation.
 
 ## Tools Used
 
 - Splunk Enterprise
-- Sample security logs
+- Kali Linux
+- Linux authentication-style logs
 - SPL searches
-- Analyst notes
+- Splunk dashboard panels
+- Splunk scheduled alerting
+- SOC-style incident reporting
 
-## Triage Workflow
+## Skills Demonstrated
 
-1. Review the alert name and trigger condition.
-2. Identify the affected host, user, source IP, and timestamp.
-3. Search related events before and after the alert.
-4. Check for repeated patterns or unusual behavior.
-5. Document findings clearly.
-6. Decide whether to close, monitor, or escalate.
+- Splunk dashboarding
+- SPL search building
+- Field extraction with `rex`
+- Aggregation with `stats`
+- Conditional logic with `eval` and `where`
+- SSH authentication analysis
+- Failed login investigation
+- Failed-to-successful login detection
+- Sudo command review
+- Alert creation
+- SOC ticket writing
 
-## Example SPL Searches
+## Dashboard Panels Built
 
-```spl
-index=* sourcetype=* error OR failed OR denied
-```
+| Panel | Purpose |
+|---|---|
+| Top Failed SSH Login Source IPs | Identifies the source IPs generating the most failed SSH login attempts. |
+| Most Targeted SSH Usernames | Identifies accounts attackers or scanners are attempting to access. |
+| IPs With Failed and Successful SSH Logins | Finds source IPs that had both failed and successful authentication events. |
+| Sudo Command Timeline by Risky Users | Reviews post-login sudo activity for suspicious or risky accounts. |
+| Alert Candidates - Failed to Successful SSH Login | Shows source IPs that match the scheduled alert logic. |
 
-```spl
-index=* user=* 
-| stats count by user, host, src_ip
-| sort - count
-```
+## Key Finding
 
-```spl
-index=* src_ip=*
-| stats count by src_ip
-| sort - count
-```
+A suspicious SSH authentication sequence was identified:
 
-## Analyst Notes Template
+| Time | Source IP | User | Event |
+|---|---|---|---|
+| 08:32:55 | 192.168.1.90 | john | Failed login for invalid user `john` |
+| 08:33:22 | 192.168.1.90 | johnny | Failed login for invalid user `johnny` |
+| 08:34:49 | 192.168.1.90 | john | Successful login as `john` |
+| 08:35:18 | N/A | john | Sudo command: `/usr/bin/whoami` |
+
+## Analyst Assessment
+
+The activity from `192.168.1.90` is suspicious because it shows failed login attempts against similar usernames, followed by a successful login and sudo command execution. The `whoami` command is not destructive by itself, but after suspicious authentication activity it may indicate privilege validation.
+
+Severity: **High**
+
+Reason: Failed SSH login attempts followed by successful access and sudo execution.
+
+## Scheduled Alert Created
+
+Alert name:
 
 ```text
-Alert Name:
-Date/Time:
-Host:
-User:
-Source IP:
-Observed Activity:
-Evidence Found:
-Assessment:
-Recommended Action:
+SSH Failed Logins Followed by Successful Login
 ```
 
-## Skills Practiced
+Detection logic:
 
-- Alert review
-- Splunk searching
-- Timeline analysis
-- Pattern recognition
-- Investigation documentation
-- Escalation decision-making
+```spl
+index=* ("Failed password" OR "Accepted password")
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| rex "Failed password for (invalid user )?(?<failed_user>\w+)"
+| rex "Accepted password for (?<success_user>\w+)"
+| eval user=coalesce(failed_user, success_user)
+| stats 
+    count(eval(searchmatch("Failed password"))) as failed_logins
+    count(eval(searchmatch("Accepted password"))) as successful_logins
+    values(user) as users_seen
+    by src_ip
+| where failed_logins >= 2 AND successful_logins >= 1
+| sort - failed_logins
+```
 
-## Next Improvements
+Trigger condition:
 
-- Add screenshots of the alert workflow
-- Add sample events
-- Add completed analyst notes
-- Add severity levels
-- Build a small dashboard for alert counts
+```text
+Number of results is greater than 0
+```
+
+## Recommended Response Actions
+
+1. Confirm whether `192.168.1.90` is an authorized internal workstation.
+2. Validate whether the `john` login was legitimate.
+3. Review all commands executed by `john` after login.
+4. Reset the `john` password if the activity is unauthorized.
+5. Review SSH hardening controls.
+6. Disable direct root SSH login where applicable.
+7. Consider account lockout or MFA for SSH access.
+
+## Repository Structure
+
+```text
+.
+├── README.md
+├── searches/
+│   ├── failed-login-source-ips.spl
+│   ├── targeted-usernames.spl
+│   ├── failed-to-successful-login-alert.spl
+│   ├── john-incident-timeline.spl
+│   └── sudo-command-timeline.spl
+├── incident-report/
+│   └── ssh-authentication-incident-report.md
+├── sample-logs/
+│   └── auth-test.log
+└── screenshots/
+    └── README.md
+```
+
+## Notes
+
+This lab uses simulated authentication logs for training and portfolio demonstration. The workflow mirrors real SOC triage logic: detect suspicious activity, validate evidence, build a timeline, assess risk, and document recommended response actions.
