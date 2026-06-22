@@ -1,0 +1,14 @@
+index=* ("john" OR "192.168.1.90")
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| rex "Failed password for (invalid user )?(?<failed_user>\w+)"
+| rex "Accepted password for (?<success_user>\w+)"
+| rex "sudo:\s(?<sudo_user>\w+)"
+| rex "COMMAND=(?<command>.*)"
+| eval user=coalesce(failed_user, success_user, sudo_user)
+| eval finding=case(
+    searchmatch("Failed password"), "Failed SSH Login",
+    searchmatch("Accepted password"), "Successful SSH Login",
+    searchmatch("sudo:"), "Sudo Command"
+)
+| table _time src_ip user finding command _raw
+| sort _time
