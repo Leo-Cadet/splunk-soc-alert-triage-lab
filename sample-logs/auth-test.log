@@ -1,0 +1,41 @@
+Jun 22 08:10:01 kali sshd[1101]: Failed password for invalid user admin from 185.199.108.23 port 52210 ssh2
+Jun 22 08:10:15 kali sshd[1102]: Failed password for invalid user admin from 185.199.108.23 port 52211 ssh2
+Jun 22 08:10:31 kali sshd[1103]: Failed password for invalid user admin from 185.199.108.23 port 52212 ssh2
+Jun 22 08:11:02 kali sshd[1104]: Failed password for root from 203.0.113.10 port 45100 ssh2
+Jun 22 08:11:28 kali sshd[1105]: Failed password for root from 203.0.113.10 port 45101 ssh2
+Jun 22 08:11:59 kali sshd[1106]: Failed password for root from 203.0.113.10 port 45102 ssh2
+Jun 22 08:12:40 kali sshd[1107]: Failed password for invalid user test from 45.33.32.10 port 33001 ssh2
+Jun 22 08:13:04 kali sshd[1108]: Failed password for invalid user guest from 45.33.32.10 port 33002 ssh2
+Jun 22 08:13:44 kali sshd[1109]: Failed password for invalid user ubuntu from 45.33.32.10 port 33003 ssh2
+Jun 22 08:14:10 kali sshd[1110]: Failed password for invalid user oracle from 198.51.100.77 port 41000 ssh2
+Jun 22 08:14:41 kali sshd[1111]: Failed password for invalid user postgres from 198.51.100.77 port 41001 ssh2
+Jun 22 08:15:05 kali sshd[1112]: Failed password for invalid user mysql from 198.51.100.77 port 41002 ssh2
+Jun 22 08:16:12 kali sshd[1113]: Failed password for invalid user security from 192.168.1.200 port 51422 ssh2
+Jun 22 08:16:37 kali sshd[1114]: Failed password for security from 192.168.1.200 port 51423 ssh2
+Jun 22 08:17:01 kali sshd[1115]: Failed password for security from 192.168.1.200 port 51424 ssh2
+Jun 22 08:17:44 kali sshd[1116]: Accepted password for security from 192.168.1.200 port 51425 ssh2
+Jun 22 08:18:12 kali sudo: security : TTY=pts/0 ; PWD=/home/security ; USER=root ; COMMAND=/usr/bin/grep Failed /var/log/auth.log
+Jun 22 08:20:10 kali sshd[1117]: Failed password for invalid user backup from 10.10.10.5 port 50222 ssh2
+Jun 22 08:20:34 kali sshd[1118]: Failed password for backup from 10.10.10.5 port 50223 ssh2
+Jun 22 08:21:09 kali sshd[1119]: Accepted password for backup from 10.10.10.5 port 50224 ssh2
+Jun 22 08:21:41 kali sudo: backup : TTY=pts/1 ; PWD=/home/backup ; USER=root ; COMMAND=/usr/bin/rsync -av /home /mnt/backup
+Jun 22 08:24:12 kali sshd[1120]: Failed password for invalid user dev from 172.16.5.30 port 60111 ssh2
+Jun 22 08:24:31 kali sshd[1121]: Failed password for devops from 172.16.5.30 port 60112 ssh2
+Jun 22 08:25:05 kali sshd[1122]: Accepted password for devops from 172.16.5.30 port 60113 ssh2
+Jun 22 08:25:39 kali sudo: devops : TTY=pts/2 ; PWD=/home/devops ; USER=root ; COMMAND=/usr/bin/docker ps
+Jun 22 08:26:14 kali sudo: devops : TTY=pts/2 ; PWD=/home/devops ; USER=root ; COMMAND=/usr/bin/docker logs webapp
+Jun 22 08:29:42 kali sshd[1123]: Failed password for invalid user support from 192.168.1.85 port 44210 ssh2
+Jun 22 08:30:09 kali sshd[1124]: Failed password for support from 192.168.1.85 port 44211 ssh2
+Jun 22 08:30:51 kali sshd[1125]: Accepted password for support from 192.168.1.85 port 44212 ssh2
+Jun 22 08:31:18 kali sudo: support : TTY=pts/3 ; PWD=/home/support ; USER=root ; COMMAND=/usr/bin/systemctl restart ssh
+Jun 22 08:32:55 kali sshd[1126]: Failed password for invalid user john from 192.168.1.90 port 51210 ssh2
+Jun 22 08:33:22 kali sshd[1127]: Failed password for invalid user johnny from 192.168.1.90 port 51211 ssh2
+Jun 22 08:34:49 kali sshd[1128]: Accepted password for john from 192.168.1.90 port 51212 ssh2
+Jun 22 08:35:18 kali sudo: john : TTY=pts/4 ; PWD=/home/john ; USER=root ; COMMAND=/usr/bin/whoami
+Jun 22 08:38:12 kali sshd[1129]: Failed password for root from 10.0.0.25 port 62001 ssh2
+Jun 22 08:38:37 kali sshd[1130]: Failed password for root from 10.0.0.25 port 62002 ssh2
+Jun 22 08:39:01 kali sshd[1131]: Failed password for root from 10.0.0.25 port 62003 ssh2
+Jun 22 08:39:25 kali sshd[1132]: Failed password for root from 10.0.0.25 port 62004 ssh2
+Jun 22 08:40:10 kali sshd[1133]: Accepted password for leo from 192.168.1.70 port 53001 ssh2
+Jun 22 08:42:14 kali sshd[1134]: Accepted password for admin from 192.168.1.10 port 53321 ssh2
+Jun 22 08:45:19 kali sshd[1135]: Accepted password for helpdesk from 192.168.1.80 port 54888 ssh2
