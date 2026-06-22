@@ -1,13 +1,14 @@
 # Screenshots
 
-Add the finished lab screenshots here.
+This folder contains the final visual evidence for the Splunk SOC alert triage lab.
 
-Recommended file names:
+Uploaded screenshots:
 
-1. `splunk-ssh-dashboard.png`
+1. `Splunk-ssh-dashboard-full.png`
 2. `splunk-alert-rule.png`
-3. `john-incident-timeline.png`
-4. `sudo-command-timeline.png`
-5. `alert-candidates-panel.png`
+3. `top-failed-login-source-ips.png`
+4. `failed-successful-login-candidates.png`
+5. `sudo-command-review.png`
+6. `splunk-startup-status.png`
 
-These images should show the dashboard, scheduled alert settings, detection results, and incident timeline evidence.
+These images show the Splunk dashboard, scheduled alert settings, detection results, sudo activity review, and Splunk startup/status evidence.
