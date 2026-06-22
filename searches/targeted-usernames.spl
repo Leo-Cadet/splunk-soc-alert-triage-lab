@@ -1,0 +1,6 @@
+index=* "Failed password"
+| rex "invalid user (?<target_user>\w+)"
+| rex "Failed password for (?<direct_user>\w+) from"
+| eval user_targeted=coalesce(target_user,direct_user)
+| stats count as attempts by user_targeted
+| sort - attempts
