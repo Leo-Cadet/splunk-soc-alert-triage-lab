@@ -1,0 +1,6 @@
+index=* "sudo:"
+| rex "sudo:\s(?<sudo_user>\w+)"
+| rex "COMMAND=(?<command>.*)"
+| search sudo_user IN ("john","backup","support","devops","security")
+| table _time sudo_user command _raw
+| sort _time
