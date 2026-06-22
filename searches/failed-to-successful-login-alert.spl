@@ -1,0 +1,12 @@
+index=* ("Failed password" OR "Accepted password")
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| rex "Failed password for (invalid user )?(?<failed_user>\w+)"
+| rex "Accepted password for (?<success_user>\w+)"
+| eval user=coalesce(failed_user, success_user)
+| stats 
+    count(eval(searchmatch("Failed password"))) as failed_logins
+    count(eval(searchmatch("Accepted password"))) as successful_logins
+    values(user) as users_seen
+    by src_ip
+| where failed_logins >= 2 AND successful_logins >= 1
+| sort - failed_logins
